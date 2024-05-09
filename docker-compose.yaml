@@ -1,6 +1,25 @@
-version: '3.7'
+version: '3.8'
 
 services:
-  db:
-    image: postgres
-    restart: always
+  postgres:
+    image: postgres:14
+    container_name: pg_container
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lockings
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres_net
+
+networks:
+  postgres_net:
+    driver: bridge
+
+volumes:
+  pg_data:
+    driver: local

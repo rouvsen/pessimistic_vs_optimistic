@@ -1,0 +1,27 @@
+server:
+  port: 9191
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/lockings
+    username: myuser
+    password: mypassword
+    hikari:
+      jdbc-url: jdbc:postgresql://localhost:5432/lockings
+      maximum-pool-size: 5 #4 *(exclusive assignment)
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+logging:
+  level:
+    #org.hibernate.sql: debug # Log all SQL DML statements as they are executed
+    #org.hibernate.type: trace # Log the JDBC parameters passed to a query
+    sql: debug
+    org.hibernate.orm.jdbc.bind: trace
