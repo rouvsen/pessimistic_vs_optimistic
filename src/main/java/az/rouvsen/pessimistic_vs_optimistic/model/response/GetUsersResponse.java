@@ -5,14 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountBalanceResponse {
+public class GetUsersResponse {
     private String name;
-    private BigDecimal lastBalance;
-    private BigDecimal currentBalance;
 }

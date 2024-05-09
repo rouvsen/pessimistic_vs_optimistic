@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountResponse {
+public class GetAccountResponse {
     private String name;
     private BigDecimal balance;
 }
