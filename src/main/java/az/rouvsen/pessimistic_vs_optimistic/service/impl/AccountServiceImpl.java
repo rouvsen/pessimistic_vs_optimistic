@@ -8,8 +8,12 @@ import az.rouvsen.pessimistic_vs_optimistic.repository.AccountRepository;
 import az.rouvsen.pessimistic_vs_optimistic.repository.UserRepository;
 import az.rouvsen.pessimistic_vs_optimistic.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,6 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+    private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
@@ -55,17 +60,23 @@ public class AccountServiceImpl implements AccountService {
         ucokBalance.setName(ucok.getName());
         ucokBalance.setLastBalance(ucokAccount.getBalance());
         //Transfer balance eko to ucok for 1$
-        BigDecimal amount = BigDecimal.valueOf(1);
-        if (ekoAccount.getBalance().compareTo(BigDecimal.valueOf(1)) >= 1) {
-            ekoAccount.setBalance(ekoAccount.getBalance().subtract(amount));
-            Account ekoSuccessTransfer = accountRepository.saveAndFlush(ekoAccount);
-            ekoBalance.setCurrentBalance(ekoSuccessTransfer.getBalance());
+        try {
+            BigDecimal amount = BigDecimal.valueOf(1);
+            if (ekoAccount.getBalance().compareTo(BigDecimal.valueOf(1)) >= 1) {
+                ekoAccount.setBalance(ekoAccount.getBalance().subtract(amount));
+                Account ekoSuccessTransfer = accountRepository.saveAndFlush(ekoAccount);
+                ekoBalance.setCurrentBalance(ekoSuccessTransfer.getBalance());
 
-            ucokAccount.setBalance(ucokAccount.getBalance().add(amount));
-            Account ucokSuccessReceive = accountRepository.saveAndFlush(ucokAccount);
-            ucokBalance.setCurrentBalance(ucokSuccessReceive.getBalance());
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient Balance!");
+                ucokAccount.setBalance(ucokAccount.getBalance().add(amount));
+                Account ucokSuccessReceive = accountRepository.saveAndFlush(ucokAccount);
+                ucokBalance.setCurrentBalance(ucokSuccessReceive.getBalance());
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient Balance!");
+            }
+        } catch (ObjectOptimisticLockingFailureException exception) {
+            log.error("ObjectOptimisticLockingFailureException occurred!");
+        } catch (UnexpectedRollbackException exception) {
+            log.error("UnexpectedRollbackException occurred!");
         }
         result.add(ekoBalance);
         result.add(ucokBalance);

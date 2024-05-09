@@ -1,11 +1,8 @@
 ### GET Users
-GET http://localhost:8080/bank/users
+GET http://localhost:9191/api/v1/users
 
 ### GET Accounts
-GET http://localhost:8080/bank/accounts
+GET http://localhost:9191/api/v1/accounts
 
 ### Transfer Race Condition
-GET http://localhost:8080/bank/transfer-race-condition
-
-### Transfer Sequential
-GET http://localhost:8080/bank/transfer-sequential
+GET http://localhost:9191/api/v1/transfer

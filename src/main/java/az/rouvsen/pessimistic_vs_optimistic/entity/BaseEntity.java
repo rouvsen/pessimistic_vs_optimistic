@@ -40,9 +40,8 @@ public class BaseEntity {
 //    private String updatedBy;
 
 
-
-//    @Column(name = "version")
-//    @Version
-//    private Long version;
+    @Column(name = "version")
+    @Version
+    private Long version;
 
 }

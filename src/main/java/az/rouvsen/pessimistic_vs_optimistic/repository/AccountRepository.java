@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, String> {
 
-//    @Lock(value = LockModeType.OPTIMISTIC_FORCE_INCREMENT)
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    @Lock(value = LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+//    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     Optional<Account> findByUser(User user);
 
 }
