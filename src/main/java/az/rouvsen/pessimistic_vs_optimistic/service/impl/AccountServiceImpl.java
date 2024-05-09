@@ -2,8 +2,8 @@ package az.rouvsen.pessimistic_vs_optimistic.service.impl;
 
 import az.rouvsen.pessimistic_vs_optimistic.entity.Account;
 import az.rouvsen.pessimistic_vs_optimistic.entity.User;
-import az.rouvsen.pessimistic_vs_optimistic.model.response.GetAccountBalance;
-import az.rouvsen.pessimistic_vs_optimistic.model.response.GetAccountResponse;
+import az.rouvsen.pessimistic_vs_optimistic.model.response.AccountBalanceResponse;
+import az.rouvsen.pessimistic_vs_optimistic.model.response.AccountResponse;
 import az.rouvsen.pessimistic_vs_optimistic.repository.AccountRepository;
 import az.rouvsen.pessimistic_vs_optimistic.repository.UserRepository;
 import az.rouvsen.pessimistic_vs_optimistic.service.AccountService;
@@ -29,16 +29,16 @@ public class AccountServiceImpl implements AccountService {
     private final UserRepository userRepository;
 
     @Override
-    public List<GetAccountResponse> getAccounts() {
-        List<GetAccountResponse> responseList = new ArrayList<>();
-        accountRepository.findAll().forEach(acc -> responseList.add(new GetAccountResponse(acc.getUser().getName(), acc.getBalance())));
+    public List<AccountResponse> getAccounts() {
+        List<AccountResponse> responseList = new ArrayList<>();
+        accountRepository.findAll().forEach(acc -> responseList.add(new AccountResponse(acc.getUser().getName(), acc.getBalance())));
         return responseList;
     }
 
     @Override
     @Transactional
-    public List<GetAccountBalance> transferBalance() {
-        List<GetAccountBalance> result = new ArrayList<>();
+    public List<AccountBalanceResponse> transferBalance() {
+        List<AccountBalanceResponse> result = new ArrayList<>();
 
         User eko = userRepository.findById("2c61c8d3-5676-44ac-bc85-b72469eb08a6").orElseThrow( () ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!")
@@ -52,11 +52,11 @@ public class AccountServiceImpl implements AccountService {
         Account ucokAccount = accountRepository.findByUser(ucok).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found!"));
 
-        GetAccountBalance ekoBalance = new GetAccountBalance();
+        AccountBalanceResponse ekoBalance = new AccountBalanceResponse();
         ekoBalance.setName(eko.getName());
         ekoBalance.setLastBalance(ekoAccount.getBalance());
 
-        GetAccountBalance ucokBalance = new GetAccountBalance();
+        AccountBalanceResponse ucokBalance = new AccountBalanceResponse();
         ucokBalance.setName(ucok.getName());
         ucokBalance.setLastBalance(ucokAccount.getBalance());
         //Transfer balance eko to ucok for 1$

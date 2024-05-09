@@ -1,6 +1,6 @@
 package az.rouvsen.pessimistic_vs_optimistic.service.impl;
 
-import az.rouvsen.pessimistic_vs_optimistic.model.response.GetUsersResponse;
+import az.rouvsen.pessimistic_vs_optimistic.model.response.UserResponse;
 import az.rouvsen.pessimistic_vs_optimistic.repository.UserRepository;
 import az.rouvsen.pessimistic_vs_optimistic.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<GetUsersResponse> getUsers() {
-        List<GetUsersResponse> responseList = new ArrayList<>();
-        userRepository.findAll().forEach(user -> responseList.add(new GetUsersResponse(user.getName())));
+    public List<UserResponse> getUsers() {
+        List<UserResponse> responseList = new ArrayList<>();
+        userRepository.findAll().forEach(user -> responseList.add(new UserResponse(user.getName())));
         return responseList;
     }
 }
