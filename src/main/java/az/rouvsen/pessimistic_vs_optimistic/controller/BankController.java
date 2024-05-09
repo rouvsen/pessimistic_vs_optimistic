@@ -1,8 +1,8 @@
 package az.rouvsen.pessimistic_vs_optimistic.controller;
 
-import az.rouvsen.pessimistic_vs_optimistic.model.response.GetAccountBalance;
-import az.rouvsen.pessimistic_vs_optimistic.model.response.GetAccountResponse;
-import az.rouvsen.pessimistic_vs_optimistic.model.response.GetUsersResponse;
+import az.rouvsen.pessimistic_vs_optimistic.model.response.AccountBalanceResponse;
+import az.rouvsen.pessimistic_vs_optimistic.model.response.AccountResponse;
+import az.rouvsen.pessimistic_vs_optimistic.model.response.UserResponse;
 import az.rouvsen.pessimistic_vs_optimistic.service.AccountService;
 import az.rouvsen.pessimistic_vs_optimistic.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +23,16 @@ public class BankController {
     private final AccountService accountService;
 
     @GetMapping(value = "/users")
-    public ResponseEntity<List<GetUsersResponse>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
     @GetMapping(value = "/accounts")
-    public ResponseEntity<List<GetAccountResponse>> getAllAccounts() {
+    public ResponseEntity<List<AccountResponse>> getAllAccounts() {
         return new ResponseEntity<>(accountService.getAccounts(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/transfer")
-    public ResponseEntity<List<GetAccountBalance>> transferBalanceRaceCondition() {
+    public ResponseEntity<List<AccountBalanceResponse>> transferBalanceRaceCondition() {
         return new ResponseEntity<>(accountService.transferBalance(), HttpStatus.OK);
     }
 
